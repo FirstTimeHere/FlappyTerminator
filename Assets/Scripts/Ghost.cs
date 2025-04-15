@@ -16,8 +16,33 @@ public class Ghost : MonoBehaviour
 
     private void Awake()
     {
+        _handler = GetComponent<GhostCollisionHandler>();
         _mover = GetComponent<GhostMover>();
         _scoreCounter = GetComponent<ScoreCounter>();
-        _handler = GetComponent<GhostCollisionHandler>();
+    }
+
+    private void OnEnable()
+    {
+        _handler.CollisionDetected += ProcessCollision;
+    }
+
+    private void OnDisable()
+    {
+        _handler.CollisionDetected -= ProcessCollision;
+    }
+
+
+    private void ProcessCollision(IInteractable interactable)
+    {
+        if (interactable is LaserWeapon)
+        {
+            GameOver?.Invoke();
+        }
+    }
+
+    public void Reset()
+    {
+        _scoreCounter.Reset();
+        _mover.Reset();
     }
 }

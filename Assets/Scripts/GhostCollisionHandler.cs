@@ -1,18 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
+[RequireComponent(typeof(Ghost))]
 public class GhostCollisionHandler : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public event Action<IInteractable> CollisionDetected;
+
+    private void OnValidate()
     {
-        
+        GetComponent<Collider2D>().isTrigger = true;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if (collision.TryGetComponent(out IInteractable interactable))
+        {
+            CollisionDetected?.Invoke(interactable);
+        }
     }
 }

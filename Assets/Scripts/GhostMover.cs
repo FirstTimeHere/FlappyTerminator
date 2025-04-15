@@ -13,11 +13,12 @@ public class GhostMover : MonoBehaviour
     [SerializeField] private float _minRotationZ;
 
     private Vector3 _startPosition;
-
     private Rigidbody2D _body;
-
     private Quaternion _maxRotation;
     private Quaternion _minRotation;
+
+    private KeyCode _space = KeyCode.Space;
+
 
     private void Start()
     {
@@ -30,12 +31,17 @@ public class GhostMover : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(_space))
         {
             _body.velocity = new Vector2(_speed, _tapForce);
             transform.rotation = _maxRotation;
         }
 
         transform.rotation = Quaternion.Lerp(transform.rotation, _minRotation, _rotationSpeed * Time.deltaTime);
+    }
+
+    public void Reset()
+    {
+        
     }
 }
